@@ -22,9 +22,11 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
   if (!isMounted) {
     return null;
   }
+
   return (
     <Modal
       title="Continue?"
