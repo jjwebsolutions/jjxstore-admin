@@ -61,7 +61,7 @@ export async function GET(
       return new NextResponse("Store Id is required", { status: 400 });
     }
 
-    const billboards = await prismadb.billboard.findMany({
+    const billboards = await prismadb.billboard.findFirst({
       where: {
         storeId: params.storeId,
       },
