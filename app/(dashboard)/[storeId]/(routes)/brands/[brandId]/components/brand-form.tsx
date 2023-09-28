@@ -1,6 +1,6 @@
 "use client";
 
-import { Size } from "@prisma/client";
+import { Brand } from "@prisma/client";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
@@ -25,8 +25,8 @@ import { AlertModal } from "@/components/modals/alert-modal";
 import { useOrigin } from "@/hooks/use-origin";
 import ImageUpload from "@/components/ui/image-upload";
 
-interface SizeFormProps {
-  initialData: Size | null;
+interface BrandFormProps {
+  initialData: Brand | null;
 }
 
 const formSchema = z.object({
@@ -34,21 +34,21 @@ const formSchema = z.object({
   value: z.string().min(1),
 });
 
-type SizeFormValues = z.infer<typeof formSchema>;
+type BrandFormValues = z.infer<typeof formSchema>;
 
-export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
+export const BrandForm: React.FC<BrandFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
   const origin = useOrigin();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "Edit size" : "Create size";
-  const description = initialData ? "Edit size" : "Create size";
-  const toastMessage = initialData ? "Size updated" : "Size created";
-  const action = initialData ? "Save changes" : "Create size";
+  const title = initialData ? "Edit brand" : "Create brand";
+  const description = initialData ? "Edit brand" : "Create brand";
+  const toastMessage = initialData ? "Brand updated" : "Brand created";
+  const action = initialData ? "Save changes" : "Create brand";
 
-  const form = useForm<SizeFormValues>({
+  const form = useForm<BrandFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
@@ -56,21 +56,21 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
     },
   });
 
-  const onSubmit = async (data: SizeFormValues) => {
+  const onSubmit = async (data: BrandFormValues) => {
     try {
       setLoading(true);
 
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/sizes/${params.sizeId}`,
+          `/api/${params.storeId}/brands/${params.brandId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/sizes`, data);
+        await axios.post(`/api/${params.storeId}/brands`, data);
       }
 
       router.refresh();
-      router.push(`/${params.storeId}/sizes`);
+      router.push(`/${params.storeId}/brands`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something wrong");
@@ -82,12 +82,12 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/sizes/${params.sizeId}`);
+      await axios.delete(`/api/${params.storeId}/brands/${params.brandId}`);
       router.refresh();
-      router.push(`/${params.storeId}/sizes`);
-      toast.success("Size deleted");
+      router.push(`/${params.storeId}/brands`);
+      toast.success("Brand deleted");
     } catch (error) {
-      toast.error("Error, delete everything related to this size before");
+      toast.error("Error, delete everything related to this brand before");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -131,7 +131,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Size name"
+                      placeholder="Brand name"
                       {...field}
                     />
                   </FormControl>
@@ -148,7 +148,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Size value"
+                      placeholder="Brand value"
                       {...field}
                     />
                   </FormControl>
@@ -166,3 +166,5 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
     </>
   );
 };
+
+export default BrandForm;

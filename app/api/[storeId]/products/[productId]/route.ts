@@ -19,8 +19,9 @@ export async function GET(
       include: {
         images: true,
         category: true,
-        size: true,
+
         color: true,
+        brand: true,
       },
     });
 
@@ -85,7 +86,8 @@ export async function PATCH(
       categoryId,
       images,
       colorId,
-      sizeId,
+
+      brandId,
       isFeatured,
       isArchived,
     } = body;
@@ -118,8 +120,8 @@ export async function PATCH(
       return new NextResponse("Color id is required", { status: 400 });
     }
 
-    if (!sizeId) {
-      return new NextResponse("Size id is required", { status: 400 });
+    if (!brandId) {
+      return new NextResponse("Brand id is required", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -142,7 +144,7 @@ export async function PATCH(
         price,
         categoryId,
         colorId,
-        sizeId,
+        brandId,
         images: {
           deleteMany: {},
         },
